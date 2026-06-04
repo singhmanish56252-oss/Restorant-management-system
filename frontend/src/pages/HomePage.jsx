@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChefHat, Clock, Star, Truck, ShieldCheck, Utensils } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function HomePage({ setCurrentPage }) {
   const features = [
@@ -15,92 +16,198 @@ export default function HomePage({ setCurrentPage }) {
     { emoji: '🍹', label: 'Drinks', color: '#60a5fa', value: 'Drinks' },
   ];
 
+  // Animation Variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.8, rotate: -5 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      rotate: 0,
+      transition: { duration: 0.8, ease: 'easeOut', delay: 0.3 } 
+    }
+  };
+
   return (
     <>
       {/* Hero */}
       <section className="hero">
         <div className="hero-bg" />
-        <div className="hero-content">
-          <div className="hero-badge">
-            <span />
-            Now Taking Orders
+        <motion.div 
+          className="hero-content"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <div className="hero-text">
+            <motion.div className="hero-badge" variants={itemVariants}>
+              <span />
+              Now Taking Orders
+            </motion.div>
+
+            <motion.h1 variants={itemVariants}>
+              Fine Dining,<br />
+              <em>Delivered to You</em>
+            </motion.h1>
+
+            <motion.p variants={itemVariants}>
+              Experience the best of hotel cuisine — order from our premium menu
+              and track your food in real time, all from one elegant platform.
+            </motion.p>
+
+            <motion.div className="hero-actions" variants={itemVariants}>
+              <button className="btn btn-primary btn-lg" onClick={() => setCurrentPage('menu')}>
+                🍽️ Explore Menu
+              </button>
+              <button className="btn btn-ghost btn-lg" onClick={() => setCurrentPage('auth')}>
+                Sign In / Register
+              </button>
+            </motion.div>
+
+            <motion.div className="hero-stats" variants={itemVariants}>
+              {[
+                { value: '50+', label: 'Menu Items' },
+                { value: '3', label: 'Categories' },
+                { value: '< 30 min', label: 'Delivery Time' },
+                { value: '4.9 ⭐', label: 'Average Rating' },
+              ].map(s => (
+                <div key={s.label}>
+                  <div className="hero-stat-value">{s.value}</div>
+                  <div className="hero-stat-label">{s.label}</div>
+                </div>
+              ))}
+            </motion.div>
           </div>
 
-          <h1>
-            Fine Dining,<br />
-            <em>Delivered to You</em>
-          </h1>
-
-          <p>
-            Experience the best of hotel cuisine — order from our premium menu
-            and track your food in real time, all from one elegant platform.
-          </p>
-
-          <div className="hero-actions">
-            <button className="btn btn-primary btn-lg" onClick={() => setCurrentPage('menu')}>
-              🍽️ Explore Menu
-            </button>
-            <button className="btn btn-ghost btn-lg" onClick={() => setCurrentPage('auth')}>
-              Sign In / Register
-            </button>
-          </div>
-
-          <div className="hero-stats">
-            {[
-              { value: '50+', label: 'Menu Items' },
-              { value: '3', label: 'Categories' },
-              { value: '< 30 min', label: 'Delivery Time' },
-              { value: '4.9 ⭐', label: 'Average Rating' },
-            ].map(s => (
-              <div key={s.label}>
-                <div className="hero-stat-value">{s.value}</div>
-                <div className="hero-stat-label">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+          <motion.div 
+            className="hero-image-container"
+            variants={imageVariants}
+          >
+            <div className="hero-image-wrapper">
+              <div className="hero-image-ring" />
+              <div className="hero-image-glow" />
+              <img 
+                src="/hero-dish.png" 
+                alt="Luxury Gourmet Dining" 
+                className="hero-dish-img"
+              />
+            </div>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Categories */}
       <section style={{ padding: '80px 20px', background: 'var(--bg-secondary)' }}>
         <div className="container">
-          <h2 style={{ textAlign: 'center', marginBottom: 12 }}>Browse by Category</h2>
-          <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: 48 }}>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            style={{ textAlign: 'center', marginBottom: 12 }}
+          >
+            Browse by Category
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: 48 }}
+          >
             Something for every craving
-          </p>
-          <div className="grid-3">
+          </motion.p>
+          <motion.div 
+            className="grid-3"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+            }}
+          >
             {categories.map(cat => (
-              <button
+              <motion.button
                 key={cat.value}
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+                }}
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
                 onClick={() => setCurrentPage('menu')}
                 style={{
                   background: 'var(--bg-card)', border: '1px solid var(--border)',
                   borderRadius: 'var(--radius-xl)', padding: '40px 32px',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
-                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center',
+                  cursor: 'pointer', transition: 'border-color 0.2s, background-color 0.2s', textAlign: 'center',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = cat.color; e.currentTarget.style.transform = 'translateY(-4px)'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = cat.color; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; }}
               >
                 <span style={{ fontSize: '3.5rem' }}>{cat.emoji}</span>
                 <span style={{ fontSize: '1.3rem', fontWeight: 700 }}>{cat.label}</span>
                 <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>View all {cat.label} items →</span>
-              </button>
+              </motion.button>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Features */}
       <section style={{ padding: '80px 20px' }}>
         <div className="container">
-          <h2 style={{ textAlign: 'center', marginBottom: 12 }}>Why LuxeEats?</h2>
-          <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: 48 }}>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            style={{ textAlign: 'center', marginBottom: 12 }}
+          >
+            Why LuxeEats?
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: 48 }}
+          >
             Premium dining experience, simplified
-          </p>
-          <div className="grid-2">
+          </motion.p>
+          <motion.div 
+            className="grid-2"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+            }}
+          >
             {features.map(f => (
-              <div key={f.title} className="card card-body" style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+              <motion.div 
+                key={f.title} 
+                variants={{
+                  hidden: { opacity: 0, y: 25 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+                }}
+                whileHover={{ y: -4, borderColor: 'var(--border-gold)' }}
+                className="card card-body" 
+                style={{ display: 'flex', gap: 20, alignItems: 'flex-start', transition: 'border-color 0.2s' }}
+              >
                 <div style={{
                   width: 52, height: 52, borderRadius: 'var(--radius-md)',
                   background: 'var(--gold-glow)', display: 'flex', alignItems: 'center',
@@ -112,15 +219,22 @@ export default function HomePage({ setCurrentPage }) {
                   <h3 style={{ marginBottom: 6 }}>{f.title}</h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{f.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* CTA */}
       <section style={{ padding: '80px 20px', background: 'var(--bg-secondary)' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
+        <motion.div 
+          className="container" 
+          style={{ textAlign: 'center' }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <h2 style={{ marginBottom: 16 }}>Ready to <em style={{ color: 'var(--gold)', fontStyle: 'normal' }}>Order?</em></h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: 32, fontSize: '1.1rem' }}>
             Browse our full menu and get food delivered to your room in minutes.
@@ -128,7 +242,7 @@ export default function HomePage({ setCurrentPage }) {
           <button className="btn btn-primary btn-lg" onClick={() => setCurrentPage('menu')}>
             View Full Menu 🍽️
           </button>
-        </div>
+        </motion.div>
       </section>
 
       {/* Footer */}

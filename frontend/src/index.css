@@ -229,31 +229,102 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding: 80px 20px 60px;
+  padding: 100px 20px 80px;
 }
 .hero-bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,200,66,0.1) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(245,200,66,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,200,66,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(245,200,66,0.06) 0%, transparent 50%),
     var(--bg-primary);
 }
-.hero-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; width: 100%; }
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-text {
+  display: flex;
+  flex-direction: column;
+}
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--gold-glow); border: 1px solid var(--border-gold);
   padding: 8px 16px; border-radius: 99px; margin-bottom: 28px;
   font-size: 0.875rem; font-weight: 600; color: var(--gold);
+  width: fit-content;
 }
 .hero-badge span { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
-.hero h1 { margin-bottom: 20px; }
+.hero h1 { margin-bottom: 20px; font-size: clamp(2.2rem, 5vw, 3.6rem); }
 .hero h1 em { font-style: normal; color: var(--gold); }
-.hero p { font-size: 1.15rem; color: var(--text-secondary); max-width: 560px; margin-bottom: 40px; }
+.hero p { font-size: 1.15rem; color: var(--text-secondary); max-width: 560px; margin-bottom: 40px; line-height: 1.7; }
 .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
 
-.hero-stats { display: flex; gap: 40px; margin-top: 60px; padding-top: 60px; border-top: 1px solid var(--border); }
+.hero-stats { display: flex; gap: 40px; margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); }
 .hero-stat-value { font-size: 2rem; font-weight: 800; color: var(--gold); }
 .hero-stat-label { font-size: 0.875rem; color: var(--text-secondary); }
+
+/* ─── Hero Image Components ─── */
+.hero-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+.hero-image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-dish-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid rgba(245, 200, 66, 0.15);
+  box-shadow: var(--shadow-lg), 0 0 50px rgba(245, 200, 66, 0.25);
+  animation: float 6s ease-in-out infinite;
+  z-index: 2;
+}
+.hero-image-ring {
+  position: absolute;
+  inset: -16px;
+  border: 2px dashed rgba(245, 200, 66, 0.35);
+  border-radius: 50%;
+  animation: rotateRing 40s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-image-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 200, 66, 0.25) 0%, transparent 70%);
+  filter: blur(25px);
+  z-index: 0;
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes rotateRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.8; transform: scale(1.0); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
 
 /* ─── Menu Card ──────────────────────────────────────────── */
 .menu-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all var(--transition); }
@@ -409,11 +480,28 @@ tr:hover td { background: var(--bg-hover); }
 .slide-up { animation: slideUp 0.4s ease; }
 
 /* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+  .hero-text { align-items: center; }
+  .hero-badge { align-self: center; }
+  .hero p { max-width: 100%; }
+  .hero-actions { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-image-container { order: -1; }
+  .hero-image-wrapper { max-width: 260px; }
+}
+
 @media (max-width: 768px) {
   .cart-layout { grid-template-columns: 1fr; }
   .admin-sidebar { display: none; }
   .admin-main { margin-left: 0; padding: 90px 16px 40px; }
   .hero-stats { flex-wrap: wrap; gap: 24px; }
+  .hero-image-wrapper { max-width: 200px; }
+  .grid-2 { grid-template-columns: 1fr; }
 }
 
 /* ─── Payment Methods ────────────────────────────────────── */
