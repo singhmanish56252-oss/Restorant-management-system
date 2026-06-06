@@ -8,6 +8,24 @@ const CATEGORIES = ['All', 'Starters', 'Veg', 'Non-Veg', 'Drinks', 'Wine & Beer'
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80';
 
+const DEMO_ITEMS = [
+  { id: 1, name: 'Paneer Tikka', description: 'Marinated cottage cheese grilled to perfection with spices', price: 280, category: 'Starters', isAvailable: true, image: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80' },
+  { id: 2, name: 'Veg Spring Rolls', description: 'Crispy rolls stuffed with fresh vegetables', price: 180, category: 'Starters', isAvailable: true, image: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80' },
+  { id: 3, name: 'Dal Makhani', description: 'Creamy black lentils slow-cooked overnight', price: 220, category: 'Veg', isAvailable: true, image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80' },
+  { id: 4, name: 'Palak Paneer', description: 'Cottage cheese in rich spinach gravy', price: 260, category: 'Veg', isAvailable: true, image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80' },
+  { id: 5, name: 'Veg Biryani', description: 'Aromatic basmati rice with seasonal vegetables & saffron', price: 300, category: 'Veg', isAvailable: true, image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80' },
+  { id: 6, name: 'Butter Chicken', description: 'Tender chicken in creamy tomato butter sauce', price: 380, category: 'Non-Veg', isAvailable: true, image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80' },
+  { id: 7, name: 'Chicken Biryani', description: 'Fragrant long-grain rice layered with spiced chicken', price: 420, category: 'Non-Veg', isAvailable: true, image: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=800&q=80' },
+  { id: 8, name: 'Mutton Rogan Josh', description: 'Slow-cooked Kashmiri mutton with whole spices', price: 520, category: 'Non-Veg', isAvailable: true, image: 'https://images.unsplash.com/photo-1545247181-516773cae754?auto=format&fit=crop&w=800&q=80' },
+  { id: 9, name: 'Mango Lassi', description: 'Chilled yogurt drink blended with fresh Alphonso mango', price: 120, category: 'Drinks', isAvailable: true, image: 'https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?auto=format&fit=crop&w=800&q=80' },
+  { id: 10, name: 'Fresh Lime Soda', description: 'Refreshing lime juice with soda, sweet or salted', price: 80, category: 'Drinks', isAvailable: true, image: 'https://images.unsplash.com/photo-1543253687-c931c8e01820?auto=format&fit=crop&w=800&q=80' },
+  { id: 11, name: 'Masala Chai', description: 'Traditional spiced Indian tea with milk', price: 60, category: 'Drinks', isAvailable: true, image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=800&q=80' },
+  { id: 12, name: 'Red Wine (Glass)', description: 'Premium Sula Shiraz, full-bodied red wine', price: 450, category: 'Wine & Beer', isAvailable: true, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80' },
+  { id: 13, name: 'Premium Beer', description: 'Chilled Kingfisher Ultra premium lager', price: 280, category: 'Wine & Beer', isAvailable: true, image: 'https://images.unsplash.com/photo-1535958636474-b021ee887b13?auto=format&fit=crop&w=800&q=80' },
+  { id: 14, name: 'Gulab Jamun', description: 'Soft milk-solid dumplings soaked in rose syrup', price: 140, category: 'Desserts', isAvailable: true, image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80' },
+  { id: 15, name: 'Chocolate Lava Cake', description: 'Warm chocolate cake with a gooey molten centre', price: 220, category: 'Desserts', isAvailable: true, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80' },
+];
+
 export default function MenuPage({ setCurrentPage }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,10 +52,13 @@ export default function MenuPage({ setCurrentPage }) {
     try {
       setLoading(true);
       const res = await fetch(`${API_BASE}/menu`);
+      if (!res.ok) throw new Error('API error');
       const data = await res.json();
-      setItems(Array.isArray(data) ? data : []);
+      const list = Array.isArray(data) ? data : [];
+      setItems(list.length > 0 ? list : DEMO_ITEMS);
     } catch {
-      setItems([]);
+      // Backend not available — show demo items
+      setItems(DEMO_ITEMS);
     } finally {
       setLoading(false);
     }
