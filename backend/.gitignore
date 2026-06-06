@@ -3,3 +3,15 @@ node_modules
 .env
 
 /generated/prisma
+
+# SQLite database (local only)
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+
+# Uploads (local files)
+uploads/
