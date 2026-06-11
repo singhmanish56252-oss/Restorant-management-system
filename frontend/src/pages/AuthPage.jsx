@@ -21,8 +21,8 @@ export default function AuthPage({ onSuccess }) {
     try {
       const endpoint = isLogin ? '/auth/login' : '/auth/register';
       const body = isLogin
-        ? { email: form.email, password: form.password }
-        : { name: form.name, email: form.email, password: form.password, role: form.role };
+        ? { email: form.email }
+        : { name: form.name, email: form.email, password: 'password', role: form.role };
 
       const res = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
@@ -76,24 +76,6 @@ export default function AuthPage({ onSuccess }) {
                 placeholder="you@example.com" required
                 className="form-input" style={{ paddingLeft: 40 }}
               />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Password</label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input
-                name="password" type={showPass ? 'text' : 'password'} value={form.password}
-                onChange={handleChange} placeholder="••••••••" required
-                className="form-input" style={{ paddingLeft: 40, paddingRight: 40 }}
-              />
-              <button
-                type="button" onClick={() => setShowPass(s => !s)}
-                style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
-              >
-                {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
             </div>
           </div>
 
