@@ -16,12 +16,20 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('hotel_token');
-    const storedUser = localStorage.getItem('hotel_user');
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+    let storedToken = localStorage.getItem('hotel_token');
+    let storedUser = localStorage.getItem('hotel_user');
+    
+    // Auto login guest user if not already set
+    if (!storedToken || !storedUser) {
+      const defaultUser = { id: 2, name: 'Guest Customer', email: 'user@hotel.com', role: 'CUSTOMER' };
+      localStorage.setItem('hotel_token', 'mock_token_2');
+      localStorage.setItem('hotel_user', JSON.stringify(defaultUser));
+      storedToken = 'mock_token_2';
+      storedUser = JSON.stringify(defaultUser);
     }
+    
+    setToken(storedToken);
+    setUser(JSON.parse(storedUser));
     setLoading(false);
   }, []);
 
@@ -39,8 +47,20 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const toggleRole = () => {
+    if (!user) return;
+    const nextRole = user.role === 'ADMIN' ? 'CUSTOMER' : 'ADMIN';
+    const updatedUser = {
+      ...user,
+      name: nextRole === 'ADMIN' ? 'Admin User' : 'Guest Customer',
+      role: nextRole
+    };
+    localStorage.setItem('hotel_user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading, isAdmin: user?.role === 'ADMIN' }}>
+    <AuthContext.Provider value={{ user, token, login, logout, toggleRole, loading, isAdmin: user?.role === 'ADMIN' }}>
       {children}
     </AuthContext.Provider>
   );
