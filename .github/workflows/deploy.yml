@@ -42,6 +42,7 @@ jobs:
         working-directory: frontend
         env:
           NODE_ENV: production
+          VITE_BASE_URL: /Restorant-management-system/
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Setup Pages
